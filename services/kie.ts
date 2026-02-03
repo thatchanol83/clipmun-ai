@@ -121,10 +121,25 @@ export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> =>
         if (apiStatus === 'success' || apiStatus === 'completed' || apiStatus === 'succeeded') status = 'completed';
         else if (apiStatus === 'fail' || apiStatus === 'failed') status = 'failed';
 
+        // Parse Result Logic
+        let videoUrl = undefined;
+        if (taskData.resultJson) {
+            try {
+                const parsedResult = JSON.parse(taskData.resultJson);
+                // Based on debug data: {"resultUrls":["..."]}
+                videoUrl = parsedResult.resultUrls?.[0] || parsedResult.video_url?.[0] || undefined;
+            } catch (e) {
+                console.error("Failed to parse resultJson", e);
+            }
+        } else if (taskData.result) {
+            // Legacy/Alternative format
+            videoUrl = taskData.result?.video_url?.[0] || taskData.result?.video || undefined;
+        }
+
         return {
             taskId,
             status,
-            videoUrl: taskData.result?.video_url?.[0] || taskData.result?.video || undefined,
+            videoUrl,
             progress: taskData.progress || 0,
             rawResponse: data // Send full response to UI for debugging
         };
