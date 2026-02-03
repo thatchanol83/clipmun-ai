@@ -13,13 +13,12 @@ export interface KieJobResponse {
 // Assuming API takes standard strings or specific formats
 const mapAspectRatio = (ratio: string) => {
     // Logic to map '9:16' -> API format if different
-    // API only strictly accepts "9:16", "16:9" or specific strings.
-    // Ensure we don't send anything else.
-    if (ratio === '9:16' || ratio === '16:9') return ratio;
-    // Fallback or mapping for other values
-    if (ratio === 'portrait') return '9:16';
-    if (ratio === 'landscape') return '16:9';
-    return '9:16'; // Default safe value
+    // API Validation Fix: "9:16" might be rejected, trying "portrait" / "landscape"
+    if (ratio === '9:16' || ratio === 'portrait') return 'portrait';
+    if (ratio === '16:9' || ratio === 'landscape') return 'landscape';
+
+    // Default fallback
+    return 'portrait';
 }
 
 export const createSoraVideoJob = async (
