@@ -44,7 +44,7 @@ export const generateVideoContent = async (
         Aspect Ratio: "${aspectRatio}"
 
         Please output a JSON object with the following fields:
-        1. "prompt": A highly detailed, descriptive prompt optimized for Sora 2 to generate this video. Mention lighting, camera angles, and specific visual details matching the style.
+        1. "prompt": A highly detailed, descriptive prompt optimized for Sora 2 to generate this video. Mention lighting, camera angles, and specific visual details matching the style. IMPORTANT: This field MUST be in ENGLISH, regardless of the input language.
         2. "caption": A catchy, engaging social media caption (in ${language}) suitable for Facebook/YouTube.
         3. "hashtags": An array of 5-10 viral, relevant hashtags.
      `;
