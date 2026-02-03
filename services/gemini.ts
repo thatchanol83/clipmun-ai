@@ -45,7 +45,11 @@ export const generateVideoContent = async (
         Aspect Ratio: "${aspectRatio}"
 
         Please output a JSON object with the following fields:
-        1. "prompt": A highly detailed, descriptive prompt optimized for Sora 2 to generate this video. Mention lighting, camera angles, and specific visual details matching the style. IMPORTANT: This field MUST be in ENGLISH, regardless of the input language.
+        1. "prompt": A highly detailed, descriptive prompt optimized for Sora 2 to generate this video. Mention lighting, textures, camera angles, and visual details.
+           CRITICAL RULES FOR PROMPT:
+           - MUST BE 100% ENGLISH. No Thai, no brackets with translations like "(ไก่ชน)".
+           - SAFE FOR WORK ONLY. No violence, no "fighting", no blood, no aggressive conflict. If the user asks for fighting, change it to "posturing", "dancing", "displaying", or "majestic".
+           - Example: Instead of "Thai fighting rooster", use "Majestic Thai Rooster standing proudly in a rice field".
         2. "caption": A catchy, engaging social media caption (in ${language}) suitable for Facebook/YouTube.
         3. "hashtags": An array of 5-10 viral, relevant hashtags.
      `;

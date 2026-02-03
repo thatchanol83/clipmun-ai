@@ -8,6 +8,7 @@ export interface KieJobResponse {
     videoUrl?: string; // Only when completed
     progress?: number;
     rawResponse?: any; // For debugging
+    errorMsg?: string;
 }
 
 // Map usage friendly aspect ratios to API values if needed
@@ -141,7 +142,8 @@ export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> =>
             status,
             videoUrl,
             progress: taskData.progress || 0,
-            rawResponse: data // Send full response to UI for debugging
+            rawResponse: data, // Send full response to UI for debugging
+            errorMsg: taskData.failMsg || taskData.failCode || undefined
         };
 
     } catch (error) {

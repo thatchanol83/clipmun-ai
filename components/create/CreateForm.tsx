@@ -107,8 +107,8 @@ export default function CreateForm() {
                     setStep('completed');
                     if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
                 } else if (data.status === 'failed') {
-                    setError('Video generation failed at provider. Please try again.');
-                    setStep('preview'); // Allow retry from preview screen
+                    setError(`Video generation failed: ${data.errorMsg || 'Unknown error at provider'}`);
+                    setStep('preview'); // Allow retry
                     if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
                 }
                 // Else: keep processing
