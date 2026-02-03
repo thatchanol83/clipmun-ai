@@ -99,7 +99,7 @@ export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> =>
         });
 
         const data = await response.json();
-        const data = await response.json();
+
         const taskData = data.data;
 
         if (!taskData) {
