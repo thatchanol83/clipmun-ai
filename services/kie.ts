@@ -24,8 +24,8 @@ export const createSoraVideoJob = async (
     console.log('Sending job to Kie.ai...', { prompt, duration, aspectRatio });
 
     // Mock Logic
-    if (!KIE_API_KEY && process.env.NODE_ENV !== 'production') {
-        console.warn("KIE_API_KEY is missing. Using mock job.");
+    if ((!KIE_API_KEY || KIE_API_KEY.startsWith('mock_'))) {
+        console.warn("Using MOCK Kie Job (Key missing or starts with mock_)");
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({
@@ -71,7 +71,7 @@ export const createSoraVideoJob = async (
 
 export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> => {
     // Mock Logic
-    if (taskId.startsWith('mock_task')) {
+    if (taskId.startsWith('mock_task') || (!KIE_API_KEY || KIE_API_KEY?.startsWith('mock_'))) {
         return new Promise((resolve) => {
             // Simulate finishing in ~10 seconds
             const isDone = Math.random() > 0.7;

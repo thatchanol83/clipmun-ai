@@ -1,0 +1,33 @@
+# วิธีการใช้งาน
+# 1. ก๊อปปี้ข้อความด้านล่างนี้ทั้งหมด (เลือก Mode ที่ต้องการ)
+# 2. ไปที่ Vercel -> Project Settings -> Environment Variables
+# 3. เลือกแท็บ "Copy / Paste" แล้ววางลงไปได้เลย!
+
+# -------------------------------------------------------
+# OPTION 1: MOCK MODE (แบบง่ายสุด - ใช้ได้เลยไม่ต้องขอ Key)
+# -------------------------------------------------------
+# ใช้โหมดนี้ถ้าแค่อยากเห็นเว็บทำงานได้ มี Video จำลองให้ดู โดยไม่ต้องเสียเงินค่า API
+
+NODE_ENV="production"
+GEMINI_API_KEY="mock_gemini_key"
+KIE_API_KEY="mock_kie_key"
+POSTGRES_URL="postgres://default:password@ep-test-1234.us-east-1.postgres.vercel-storage.com:5432/verceldb"
+POSTGRES_PRISMA_URL="postgres://default:password@ep-test-1234.us-east-1.postgres.vercel-storage.com:5432/verceldb"
+POSTGRES_URL_NON_POOLING="postgres://default:password@ep-test-1234.us-east-1.postgres.vercel-storage.com:5432/verceldb"
+POSTGRES_USER="default"
+POSTGRES_HOST="ep-test-1234.us-east-1.postgres.vercel-storage.com"
+POSTGRES_PASSWORD="mock_password"
+POSTGRES_DATABASE="verceldb"
+
+# -------------------------------------------------------
+# OPTION 2: PRODUCTION MODE (สำหรับใช้งานจริง)
+# -------------------------------------------------------
+# ต้องไปสมัครขอบริการต่างๆ แล้วนำ Key มาแทนที่คำว่า "..."
+
+# NODE_ENV="production"
+# GEMINI_API_KEY="ใส่_AI_Studio_Key_ที่นี่"
+# KIE_API_KEY="ใส่_Kie_AI_Key_ที่นี่"
+
+# ค่า Database (จะมาเองอัตโนมัติถ้ากด Connect Storage ใน Vercel)
+# POSTGRES_URL="..."
+# ...
