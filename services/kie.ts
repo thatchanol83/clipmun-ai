@@ -111,14 +111,14 @@ export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> =>
         }
 
         // Map API status to our internal status
-        // Verify actual API status fields from docs
+        // API might use 'status' or 'state' and values like 'success'/'generated'/'generating'
+        const apiStatus = String(taskData.status || taskData.state || '').toLowerCase();
+
         let status: 'pending' | 'processing' | 'completed' | 'failed' = 'processing';
+        console.log(`[DEBUG] Task ${taskId} Raw Status: ${apiStatus}, Progress: ${taskData.progress}`);
 
-        // Log status for debugging
-        console.log(`[DEBUG] Task ${taskId} status: ${taskData.status}, Progress: ${taskData.progress}`);
-
-        if (taskData.status === 'SUCCESS') status = 'completed';
-        else if (taskData.status === 'FAILED') status = 'failed';
+        if (apiStatus === 'success' || apiStatus === 'completed' || apiStatus === 'succeeded') status = 'completed';
+        else if (apiStatus === 'fail' || apiStatus === 'failed') status = 'failed';
 
         return {
             taskId,
