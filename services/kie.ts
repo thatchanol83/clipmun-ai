@@ -94,7 +94,7 @@ export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> =>
     }
 
     try {
-        const response = await fetch(`${KIE_BASE_URL}/market/common/get-task-detail?taskId=${taskId}`, {
+        const response = await fetch(`${KIE_BASE_URL}/jobs/recordInfo?taskId=${taskId}`, {
             headers: { 'Authorization': `Bearer ${KIE_API_KEY}` }
         });
 
