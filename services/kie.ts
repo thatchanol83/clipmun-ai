@@ -13,7 +13,13 @@ export interface KieJobResponse {
 // Assuming API takes standard strings or specific formats
 const mapAspectRatio = (ratio: string) => {
     // Logic to map '9:16' -> API format if different
-    return ratio;
+    // API only strictly accepts "9:16", "16:9" or specific strings.
+    // Ensure we don't send anything else.
+    if (ratio === '9:16' || ratio === '16:9') return ratio;
+    // Fallback or mapping for other values
+    if (ratio === 'portrait') return '9:16';
+    if (ratio === 'landscape') return '16:9';
+    return '9:16'; // Default safe value
 }
 
 export const createSoraVideoJob = async (
@@ -23,8 +29,11 @@ export const createSoraVideoJob = async (
 ): Promise<KieJobResponse> => {
     console.log('Sending job to Kie.ai...', { prompt, duration, aspectRatio });
 
-    // Mock Logic
-    if ((!KIE_API_KEY || KIE_API_KEY.startsWith('mock_'))) {
+    // Mock Logic & Debugging
+    const safeKey = KIE_API_KEY ? KIE_API_KEY.trim() : '';
+    console.log(`[DEBUG] KIE_API_KEY check: Exists? ${!!safeKey}, StartsWithMock? ${safeKey.startsWith('mock_')}, Length: ${safeKey.length}`);
+
+    if (!safeKey || safeKey.startsWith('mock_')) {
         console.warn("Using MOCK Kie Job (Key missing or starts with mock_)");
         return new Promise((resolve) => {
             setTimeout(() => {
@@ -48,7 +57,7 @@ export const createSoraVideoJob = async (
                 model: "sora-2-text-to-video",
                 input: {
                     prompt: prompt,
-                    aspect_ratio: aspectRatio, // e.g., "landscape", "portrait", or "16:9" - Check docs
+                    aspect_ratio: mapAspectRatio(aspectRatio), // Safe mapping
                     n_frames: duration, // Used as duration/frames parameter based on our research
                     remove_watermark: true
                 }
@@ -71,7 +80,8 @@ export const createSoraVideoJob = async (
 
 export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> => {
     // Mock Logic
-    if (taskId.startsWith('mock_task') || (!KIE_API_KEY || KIE_API_KEY?.startsWith('mock_'))) {
+    const safeKey = KIE_API_KEY ? KIE_API_KEY.trim() : '';
+    if (taskId.startsWith('mock_task') || !safeKey || safeKey.startsWith('mock_')) {
         return new Promise((resolve) => {
             // Simulate finishing in ~10 seconds
             const isDone = Math.random() > 0.7;
