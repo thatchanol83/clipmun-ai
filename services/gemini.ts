@@ -5,6 +5,7 @@ export interface GeminiResponse {
     prompt: string;
     caption: string;
     hashtags: string[];
+    debugLastResponse?: any;
 }
 
 export const generateVideoContent = async (
