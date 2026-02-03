@@ -99,11 +99,23 @@ export const checkJobStatus = async (taskId: string): Promise<KieJobResponse> =>
         });
 
         const data = await response.json();
+        const data = await response.json();
         const taskData = data.data;
+
+        if (!taskData) {
+            console.error("Kie.ai Unexpected Response:", JSON.stringify(data));
+            // If we can't find data, maybe the task is still valid but the response is weird.
+            // Or it's an error. Let's return 'failed' or 'processing' with a log.
+            // But to prevent crash:
+            return { taskId, status: 'failed', progress: 0 };
+        }
 
         // Map API status to our internal status
         // Verify actual API status fields from docs
         let status: 'pending' | 'processing' | 'completed' | 'failed' = 'processing';
+
+        // Log status for debugging
+        console.log(`[DEBUG] Task ${taskId} status: ${taskData.status}, Progress: ${taskData.progress}`);
 
         if (taskData.status === 'SUCCESS') status = 'completed';
         else if (taskData.status === 'FAILED') status = 'failed';
