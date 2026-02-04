@@ -36,11 +36,61 @@ export default function CreateForm() {
     const [error, setError] = useState<string | null>(null);
     const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+    // Load state from local storage on mount
+    useEffect(() => {
+        const saved = localStorage.getItem('clipmun_create_state');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                // Resuming state
+                if (parsed.step !== 'input') {
+                    setKeyword(parsed.keyword || '');
+                    setSelectedStyle(parsed.selectedStyle || 'realistic');
+                    setDuration(parsed.duration || '15');
+                    setAspectRatio(parsed.aspectRatio || '9:16');
+                    setLanguage(parsed.language || 'th');
+                    setGeneratedContent(parsed.generatedContent || null);
+                    setTaskId(parsed.taskId || null);
+                    setVideoUrl(parsed.videoUrl || null);
+                    setStep(parsed.step);
+
+                    // specific resume logic
+                    if (parsed.step === 'processing_video' && parsed.taskId) {
+                        startPolling(parsed.taskId);
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to restore state", e);
+            }
+        }
+    }, []);
+
+    // Save state to local storage whenever relevant data changes
+    useEffect(() => {
+        const stateToSave = {
+            step,
+            keyword,
+            selectedStyle,
+            duration,
+            aspectRatio,
+            language,
+            generatedContent,
+            taskId,
+            videoUrl
+        };
+        localStorage.setItem('clipmun_create_state', JSON.stringify(stateToSave));
+    }, [step, keyword, selectedStyle, duration, aspectRatio, language, generatedContent, taskId, videoUrl]);
+
     // 1. Generate Metadata (Gemini)
     const handleGenerateConcept = async () => {
         if (!keyword) return;
-        setStep('generating_concept');
+        // Clear previous state when starting fresh, but keep inputs
+        setGeneratedContent(null);
+        setTaskId(null);
+        setVideoUrl(null);
         setError(null);
+
+        setStep('generating_concept');
 
         try {
             const res = await fetch('/api/ai/generate-metadata', {
@@ -357,13 +407,29 @@ export default function CreateForm() {
                         <video controls className="max-h-full max-w-full rounded-lg shadow-2xl" src={videoUrl} autoPlay loop />
                     </div>
                     <div className="p-6 bg-slate-900 flex justify-between items-center">
-                        <div className="text-slate-400 text-sm">Stored in temporary storage. Upload to Drive to save permanently.</div>
                         <button
-                            onClick={() => setIsScheduleModalOpen(true)}
-                            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold shadow-lg shadow-blue-900/20"
+                            onClick={() => {
+                                // Reset everything
+                                setStep('input');
+                                setKeyword('');
+                                setGeneratedContent(null);
+                                setTaskId(null);
+                                setVideoUrl(null);
+                                localStorage.removeItem('clipmun_create_state');
+                            }}
+                            className="text-slate-500 hover:text-white text-sm"
                         >
-                            Go to Schedule Post →
+                            Start New Video
                         </button>
+                        <div className="flex gap-3">
+                            {/* Drive Upload could go here */}
+                            <button
+                                onClick={() => setIsScheduleModalOpen(true)}
+                                className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold shadow-lg shadow-blue-900/20"
+                            >
+                                Go to Schedule Post →
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
