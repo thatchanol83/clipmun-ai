@@ -20,7 +20,6 @@ GOOGLE_CLIENT_EMAIL="service-account@project.iam.gserviceaccount.com"
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n..."
 GOOGLE_DRIVE_FOLDER_ID="root_folder_id"
 
-# AI Services
 GEMINI_API_KEY="AIza..."
 KIE_API_KEY="kie_..."
 
@@ -28,6 +27,13 @@ KIE_API_KEY="kie_..."
 AUTH_SECRET="any-long-random-string-at-least-32-chars"
 ADMIN_PASSWORD="your-secure-password"
 ```
+
+### 🚨 Troubleshooting: "missing_connection_string" Error
+If you see this error on Vercel:
+1.  Go to your **Vercel Project Dashboard**.
+2.  Click the **Storage** tab.
+3.  Click **Connect Store** -> Select your Postgres database -> **Connect**.
+4.  **IMPORTANT:** Go to **Deployments** -> Click the three dots (...) on the latest deployment -> **Redeploy**. (Environment variables update only after redeployment).
 
 ---
 
