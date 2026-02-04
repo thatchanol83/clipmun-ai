@@ -24,6 +24,11 @@ export async function GET() {
         message: "Environment Variable Debug",
         postgres: postgresVars,
         auth: authVars,
+        projectInfo: {
+            projectId: process.env.VERCEL_PROJECT_ID,
+            projectName: process.env.VERCEL_PROJECT_NAME,
+            environment: process.env.VERCEL_ENV,
+        },
         allKeys: envVars.filter(k => k.startsWith('NEXT_') || k.startsWith('VERCEL_')),
         timestamp: new Date().toISOString()
     });
