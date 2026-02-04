@@ -23,6 +23,10 @@ GOOGLE_DRIVE_FOLDER_ID="root_folder_id"
 # AI Services
 GEMINI_API_KEY="AIza..."
 KIE_API_KEY="kie_..."
+
+# Authentication (Login System)
+AUTH_SECRET="any-long-random-string-at-least-32-chars"
+ADMIN_PASSWORD="your-secure-password"
 ```
 
 ---

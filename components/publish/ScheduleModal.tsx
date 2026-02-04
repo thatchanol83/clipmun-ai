@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { X, Calendar, Clock, Facebook, Youtube } from 'lucide-react';
 
 interface ScheduleModalProps {
@@ -35,6 +36,41 @@ export default function ScheduleModal({
             setSelectedPlatforms(selectedPlatforms.filter(i => i !== p));
         } else {
             setSelectedPlatforms([...selectedPlatforms, p]);
+        }
+    };
+
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
+    const handleSchedule = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch('/api/content/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: videoTitle,
+                    prompt: videoTitle, // Using title as prompt reference for now, or pass simpler prompt
+                    video_url: initialVideoUrl,
+                    caption: initialCaption,
+                    hashtags: initialHashtags,
+                    platforms: selectedPlatforms,
+                    scheduled_for: new Date(`${date}T${time}`).toISOString(),
+                    status: 'scheduled',
+                    thumbnail_url: null // TODO: Generate thumbnail
+                }),
+            });
+
+            if (!res.ok) throw new Error('Failed to schedule');
+
+            // Success
+            router.push('/'); // Go to dashboard
+            router.refresh();
+        } catch (error) {
+            console.error(error);
+            alert('Failed to schedule post. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -106,8 +142,12 @@ export default function ScheduleModal({
                         </div>
                     </div>
 
-                    <button className="w-full py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-slate-200 transition-colors">
-                        Confirm Schedule
+                    <button
+                        onClick={handleSchedule}
+                        disabled={loading || !date || !time}
+                        className="w-full py-4 bg-white hover:bg-slate-200 text-slate-900 font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                        {loading ? 'Scheduling...' : 'Confirm Schedule'}
                     </button>
                 </div>
             </div>

@@ -28,9 +28,15 @@ export async function seedDatabase() {
                 title VARCHAR(255) NOT NULL,
                 prompt TEXT NOT NULL,
                 video_url TEXT,
-                status VARCHAR(50) NOT NULL DEFAULT 'pending', -- pending, generating, ready, posted
+                caption TEXT,
+                hashtags TEXT[],
+                platforms TEXT[],
+                thumbnail_url TEXT,
+                scheduled_for TIMESTAMP WITH TIME ZONE,
+                status VARCHAR(50) NOT NULL DEFAULT 'draft', -- draft, scheduled, posted, failed
                 user_id INTEGER REFERENCES users(id),
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             );
         `;
         console.log('Created "videos" table');
