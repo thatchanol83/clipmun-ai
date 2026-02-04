@@ -7,14 +7,28 @@ interface ScheduleModalProps {
     isOpen: boolean;
     onClose: () => void;
     videoTitle?: string;
+    initialVideoUrl?: string | null;
+    initialCaption?: string;
+    initialHashtags?: string[];
 }
 
-export default function ScheduleModal({ isOpen, onClose, videoTitle = 'My Amazing Video' }: ScheduleModalProps) {
+export default function ScheduleModal({
+    isOpen,
+    onClose,
+    videoTitle = 'My Amazing Video',
+    initialVideoUrl,
+    initialCaption,
+    initialHashtags
+}: ScheduleModalProps) {
     if (!isOpen) return null;
 
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['youtube']);
+
+    // Note: In a real app, we would store the passed video/caption/hashtags 
+    // in the DB when confirming the schedule. For now, we assume they are handled by the parent
+    // or we would add hidden fields/state here if this form submitted directly.
 
     const togglePlatform = (p: string) => {
         if (selectedPlatforms.includes(p)) {
@@ -71,8 +85,8 @@ export default function ScheduleModal({ isOpen, onClose, videoTitle = 'My Amazin
                             <button
                                 onClick={() => togglePlatform('youtube')}
                                 className={`flex-1 py-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 ${selectedPlatforms.includes('youtube')
-                                        ? 'bg-red-500/10 border-red-500 text-red-500'
-                                        : 'bg-slate-950 border-slate-800 text-slate-500 grayscale opacity-50 hover:grayscale-0 hover:opacity-100'
+                                    ? 'bg-red-500/10 border-red-500 text-red-500'
+                                    : 'bg-slate-950 border-slate-800 text-slate-500 grayscale opacity-50 hover:grayscale-0 hover:opacity-100'
                                     }`}
                             >
                                 <Youtube size={24} />
@@ -82,8 +96,8 @@ export default function ScheduleModal({ isOpen, onClose, videoTitle = 'My Amazin
                             <button
                                 onClick={() => togglePlatform('facebook')}
                                 className={`flex-1 py-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 ${selectedPlatforms.includes('facebook')
-                                        ? 'bg-blue-500/10 border-blue-500 text-blue-500'
-                                        : 'bg-slate-950 border-slate-800 text-slate-500 grayscale opacity-50 hover:grayscale-0 hover:opacity-100'
+                                    ? 'bg-blue-500/10 border-blue-500 text-blue-500'
+                                    : 'bg-slate-950 border-slate-800 text-slate-500 grayscale opacity-50 hover:grayscale-0 hover:opacity-100'
                                     }`}
                             >
                                 <Facebook size={24} />

@@ -133,6 +133,9 @@ export default function CreateForm() {
                 isOpen={isScheduleModalOpen}
                 onClose={() => setIsScheduleModalOpen(false)}
                 videoTitle={generatedContent?.prompt ? `Video: ${keyword}` : undefined}
+                initialVideoUrl={videoUrl}
+                initialCaption={generatedContent?.caption}
+                initialHashtags={generatedContent?.hashtags}
             />
 
             {/* Error Message */}
@@ -339,14 +342,6 @@ export default function CreateForm() {
                         <h3 className="text-2xl font-bold text-white mb-2">Creating Magic...</h3>
                         <p className="text-slate-400 animate-pulse">Sora is generating your {duration}s video. Can take 5+ mins.</p>
                         <div className="text-xs text-slate-600 mt-4 font-mono">Task ID: {taskId}</div>
-
-                        {/* DEBUGGING SECTION */}
-                        <div className="mt-8 text-left max-w-lg mx-auto bg-black/50 p-4 rounded-lg border border-slate-700">
-                            <p className="text-red-400 font-bold mb-2">⚠️ DEBUG INFO (Send this if stuck):</p>
-                            <pre className="text-xs text-green-400 font-mono overflow-auto max-h-40 whitespace-pre-wrap">
-                                {JSON.stringify(generatedContent?.debugLastResponse || "Waiting for data...", null, 2)}
-                            </pre>
-                        </div>
                     </div>
                 </div>
             )}
